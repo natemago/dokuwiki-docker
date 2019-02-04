@@ -19,7 +19,9 @@ RUN openssl req \
 # Dokuwiki installation
 RUN wget "https://download.dokuwiki.org/src/dokuwiki/dokuwiki-stable.tgz" -O dokuwiki.tgz && \
    tar xvf dokuwiki.tgz --transform='s#^dokuwiki[^/]\+/\(.\+\)#dokuwiki/\1#' && \
-   mv dokuwiki/* /usr/share/nginx/html/
+   rm dokuwiki.tgz && \
+   mv dokuwiki/* /usr/share/nginx/html/ && \
+   cp -r /usr/share/nginx/html/conf /usr/share/nginx/html/_conf
 
 COPY nginx/nginx.conf /etc/nginx/nginx.conf
 COPY nginx/dokuwiki.conf /etc/nginx/conf.d/default.conf

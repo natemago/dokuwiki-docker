@@ -21,12 +21,17 @@ function ensure_dir() {
 }
 
 DOCROOT="/usr/share/nginx/html"
-DATA_DIRS=( "pages" "attic" "meta" "media" "media_attic" "media_meta" "cache" "index" "locks")
+DATA_DIRS=( "pages" "attic" "meta" "media" "media_attic" "media_meta" "cache" "index" "locks" "tmp" )
 
 for data_dir in "${DATA_DIRS[@]}"
 do
   ensure_dir "${DOCROOT}/data/${data_dir}"
 done
+
+if [ -d "${DOCROOT}/_conf" ]; then
+  # A bit of a hack, but DokuWiki keeps user/conf data in separate dir and is mixed with code :(
+  cp -r -n ${DOCROOT}/_conf/* "${DOCROOT}/conf"
+fi
 
 ensure_dir "${DOCROOT}/data" "www-data:www-data" "0700"
 ensure_dir "${DOCROOT}/conf" "www-data:www-data" "0700"

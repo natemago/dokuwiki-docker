@@ -20,16 +20,21 @@ Once installed, the wiki will be available on https://localhost/doku.php
 
 To persist the data between restarts you must mount a volume. The data directory is set to `/usr/share/nginx/html/data` (in the default document root for nginx on Debian).
 
+DokuWiki keeps the user and configuration data in special directory `/usr/share/nginx/html/data`. You need to mount this as a persistent volume as well to keep the user logins and configuration data between logins as well.
+
 To run the wiki with persistent local data dir:
 
 ```bash
 docker run -d \
            -p 443:443 \
            --volume /storage/path/data:/usr/share/nginx/html/data \
+           --volume /storage/path/conf:/usr/share/nginx/html/conf \
            natemago/dokuwiki:latest
 ```
 
-where `/storage/path` is the path to your local persistent data storage.
+where:
+  * `/storage/path/data` is the path to your local persistent data storage.
+  * `/storage/path/conf` is the path to the storage that will keep the configuration for DokuWiki.
 
 ## Add valid (signed) certificates
 
@@ -45,6 +50,7 @@ To run with custom certificates:
 docker run -d \
            -p 443:443 \
            --volume /storage/path/data:/usr/share/nginx/html/data \
+           --volume /storage/path/conf:/usr/share/nginx/html/conf \
            --volume /certificates/path:/etc/ssl/live \
            natemago/dokuwiki:latest
 ```
